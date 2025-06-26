@@ -3,6 +3,9 @@ import Sidebar from "@/components/sidebar";
 import Header from "@/components/header";
 import TaskList from "@/components/task-list";
 import TaskBoard from "@/components/task-board";
+import TaskCalendar from "@/components/task-calendar";
+import TaskAnalytics from "@/components/task-analytics";
+import TaskTimer from "@/components/task-timer";
 import TaskModal from "@/components/task-modal";
 import ProgressBar from "@/components/progress-bar";
 import { useTasks } from "@/hooks/use-tasks";
@@ -69,6 +72,7 @@ export default function Dashboard() {
           onProjectFilterChange={setProjectFilter}
           viewMode={viewMode}
           onViewModeChange={setViewMode}
+          activeView={activeView}
         />
         
         <ProgressBar
@@ -76,19 +80,30 @@ export default function Dashboard() {
           total={totalTasks}
         />
         
-        {viewMode === "list" ? (
-          <TaskList
-            tasks={filteredTasks}
-            isLoading={isLoading}
-            onEditTask={handleEditTask}
-          />
-        ) : (
-          <TaskBoard
-            tasks={filteredTasks}
-            isLoading={isLoading}
-            onEditTask={handleEditTask}
-          />
-        )}
+        {(() => {
+          switch (activeView) {
+            case "calendar":
+              return <TaskCalendar tasks={filteredTasks} onEditTask={handleEditTask} />;
+            case "analytics":
+              return <TaskAnalytics tasks={tasks} />;
+            case "timer":
+              return <TaskTimer tasks={filteredTasks} onEditTask={handleEditTask} />;
+            default:
+              return viewMode === "list" ? (
+                <TaskList
+                  tasks={filteredTasks}
+                  isLoading={isLoading}
+                  onEditTask={handleEditTask}
+                />
+              ) : (
+                <TaskBoard
+                  tasks={filteredTasks}
+                  isLoading={isLoading}
+                  onEditTask={handleEditTask}
+                />
+              );
+          }
+        })()}
       </div>
 
       <TaskModal

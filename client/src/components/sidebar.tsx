@@ -5,7 +5,10 @@ import {
   Clock, 
   Star, 
   CheckCircle,
-  ClipboardList
+  ClipboardList,
+  Calendar,
+  BarChart3,
+  Timer
 } from "lucide-react";
 
 interface SidebarProps {
@@ -47,6 +50,24 @@ export default function Sidebar({ activeView, onViewChange, tasks }: SidebarProp
       icon: CheckCircle,
       count: completedCount,
     },
+    {
+      id: "calendar",
+      label: "Calendar",
+      icon: Calendar,
+      count: null,
+    },
+    {
+      id: "analytics",
+      label: "Analytics",
+      icon: BarChart3,
+      count: null,
+    },
+    {
+      id: "timer",
+      label: "Time Tracker",
+      icon: Timer,
+      count: null,
+    },
   ];
 
   const projects = [
@@ -85,14 +106,16 @@ export default function Sidebar({ activeView, onViewChange, tasks }: SidebarProp
                 >
                   <Icon className="w-5 h-5" />
                   <span className="flex-1">{item.label}</span>
-                  <span className={cn(
-                    "text-xs px-2 py-1 rounded-full",
-                    isActive
-                      ? "bg-primary/20 text-primary"
-                      : "bg-gray-100 text-gray-600"
-                  )}>
-                    {item.count}
-                  </span>
+                  {item.count !== null && (
+                    <span className={cn(
+                      "text-xs px-2 py-1 rounded-full",
+                      isActive
+                        ? "bg-primary/20 text-primary"
+                        : "bg-gray-100 text-gray-600"
+                    )}>
+                      {item.count}
+                    </span>
+                  )}
                 </button>
               </li>
             );

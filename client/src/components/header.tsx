@@ -16,6 +16,7 @@ interface HeaderProps {
   onProjectFilterChange: (project: string) => void;
   viewMode: "list" | "board";
   onViewModeChange: (mode: "list" | "board") => void;
+  activeView: string;
 }
 
 export default function Header({
@@ -30,6 +31,7 @@ export default function Header({
   onProjectFilterChange,
   viewMode,
   onViewModeChange,
+  activeView,
 }: HeaderProps) {
   const { data: projects = [] } = useProjects();
 
@@ -44,8 +46,21 @@ export default function Header({
       <header className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">All Tasks</h2>
-            <p className="text-gray-600 mt-1">Manage and organize your daily tasks</p>
+            <h2 className="text-2xl font-bold text-gray-900">
+              {activeView === "calendar" ? "Calendar View" :
+               activeView === "analytics" ? "Analytics Dashboard" :
+               activeView === "timer" ? "Time Tracker" :
+               activeView === "today" ? "Today's Tasks" :
+               activeView === "important" ? "Important Tasks" :
+               activeView === "completed" ? "Completed Tasks" :
+               "All Tasks"}
+            </h2>
+            <p className="text-gray-600 mt-1">
+              {activeView === "calendar" ? "View tasks by date and schedule" :
+               activeView === "analytics" ? "Track your productivity and progress" :
+               activeView === "timer" ? "Monitor time spent on tasks" :
+               "Manage and organize your daily tasks"}
+            </p>
           </div>
           
           <div className="flex items-center space-x-4">
@@ -60,28 +75,30 @@ export default function Header({
               />
             </div>
 
-            <div className="flex items-center bg-gray-100 rounded-lg p-1">
-              <button
-                onClick={() => onViewModeChange("list")}
-                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-                  viewMode === "list"
-                    ? "bg-white shadow-sm text-gray-900"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                List
-              </button>
-              <button
-                onClick={() => onViewModeChange("board")}
-                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-                  viewMode === "board"
-                    ? "bg-white shadow-sm text-gray-900"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                Board
-              </button>
-            </div>
+            {!["calendar", "analytics", "timer"].includes(activeView) && (
+              <div className="flex items-center bg-gray-100 rounded-lg p-1">
+                <button
+                  onClick={() => onViewModeChange("list")}
+                  className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                    viewMode === "list"
+                      ? "bg-white shadow-sm text-gray-900"
+                      : "text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  List
+                </button>
+                <button
+                  onClick={() => onViewModeChange("board")}
+                  className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                    viewMode === "board"
+                      ? "bg-white shadow-sm text-gray-900"
+                      : "text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  Board
+                </button>
+              </div>
+            )}
 
             <Button onClick={onCreateTask} className="flex items-center space-x-2">
               <Plus className="w-5 h-5" />
