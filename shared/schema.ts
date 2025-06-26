@@ -13,7 +13,7 @@ export const tasks = pgTable("tasks", {
   title: text("title").notNull(),
   description: text("description").default(""),
   priority: text("priority").notNull().default("medium"), // high, medium, low
-  status: text("status").notNull().default("active"), // active, completed
+  status: text("status").notNull().default("active"), // active, in-progress, completed
   projectId: integer("project_id").references(() => projects.id),
   dueDate: text("due_date"),
   completed: boolean("completed").notNull().default(false),

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Sidebar from "@/components/sidebar";
 import Header from "@/components/header";
 import TaskList from "@/components/task-list";
+import TaskBoard from "@/components/task-board";
 import TaskModal from "@/components/task-modal";
 import ProgressBar from "@/components/progress-bar";
 import { useTasks } from "@/hooks/use-tasks";
@@ -14,6 +15,7 @@ export default function Dashboard() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [projectFilter, setProjectFilter] = useState("all");
   const [activeView, setActiveView] = useState("all");
+  const [viewMode, setViewMode] = useState<"list" | "board">("list");
 
   const { data: tasks = [], isLoading } = useTasks();
 
@@ -65,6 +67,8 @@ export default function Dashboard() {
           onStatusFilterChange={setStatusFilter}
           projectFilter={projectFilter}
           onProjectFilterChange={setProjectFilter}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
         />
         
         <ProgressBar
@@ -72,11 +76,19 @@ export default function Dashboard() {
           total={totalTasks}
         />
         
-        <TaskList
-          tasks={filteredTasks}
-          isLoading={isLoading}
-          onEditTask={handleEditTask}
-        />
+        {viewMode === "list" ? (
+          <TaskList
+            tasks={filteredTasks}
+            isLoading={isLoading}
+            onEditTask={handleEditTask}
+          />
+        ) : (
+          <TaskBoard
+            tasks={filteredTasks}
+            isLoading={isLoading}
+            onEditTask={handleEditTask}
+          />
+        )}
       </div>
 
       <TaskModal

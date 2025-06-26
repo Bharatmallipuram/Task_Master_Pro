@@ -14,6 +14,8 @@ interface HeaderProps {
   onStatusFilterChange: (status: string) => void;
   projectFilter: string;
   onProjectFilterChange: (project: string) => void;
+  viewMode: "list" | "board";
+  onViewModeChange: (mode: "list" | "board") => void;
 }
 
 export default function Header({
@@ -26,6 +28,8 @@ export default function Header({
   onStatusFilterChange,
   projectFilter,
   onProjectFilterChange,
+  viewMode,
+  onViewModeChange,
 }: HeaderProps) {
   const { data: projects = [] } = useProjects();
 
@@ -57,10 +61,24 @@ export default function Header({
             </div>
 
             <div className="flex items-center bg-gray-100 rounded-lg p-1">
-              <button className="px-3 py-1 rounded-md bg-white shadow-sm text-gray-900 text-sm font-medium">
+              <button
+                onClick={() => onViewModeChange("list")}
+                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                  viewMode === "list"
+                    ? "bg-white shadow-sm text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
                 List
               </button>
-              <button className="px-3 py-1 rounded-md text-gray-600 text-sm font-medium hover:text-gray-900">
+              <button
+                onClick={() => onViewModeChange("board")}
+                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                  viewMode === "board"
+                    ? "bg-white shadow-sm text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
                 Board
               </button>
             </div>
